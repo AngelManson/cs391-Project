@@ -1,25 +1,28 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
 
     const [query, setQuery] = useState("");
+    const router = useRouter();   // ← add this
 
-    function handleSearch (e: React.FormEvent<HTMLFormElement>){
+    function handleSearch (e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        //add navigation to results page with query
+        if (!query.trim()) return;
+
+        // Navigate to /search?q=your-query
+        router.push(`/search?q=${encodeURIComponent(query)}`);
     };
 
     return (
         <main className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
-            {/* Page Title (optional) */}
             <h1 className="text-4xl font-semibold mb-10 text-gray-800">
                 Dav00di
             </h1>
 
-            {/* Search bar */}
             <form
                 onSubmit={handleSearch}
                 className="w-full max-w-xl flex flex-col items-center"
@@ -43,4 +46,5 @@ export default function HomePage() {
             </form>
         </main>
     );
+
 }
