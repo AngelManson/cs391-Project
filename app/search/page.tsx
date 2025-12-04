@@ -6,7 +6,7 @@ Uses getSearch.ts to get matching documents:
 
 import { getSearch } from "@/lib/getSearch";
 
-export default async function SearchPage({ searchParams }: any) {
+export default async function SearchPage({ searchParams } : any) {
     const params = await searchParams;
     const query = params.q || "";
 
@@ -19,10 +19,10 @@ export default async function SearchPage({ searchParams }: any) {
             </h1>
 
             <div className="space-y-6">
-                {results.map((doc: any) => (
+                {results.map((doc) => (
                     <a
-                        key={doc._id}
-                        href={`/doc/${doc._id}`}
+                        key={doc.title}
+                        href={`/doc/${doc.title}`}
                         className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
                     >
                         <h2 className="text-xl font-semibold">{doc.title}</h2>
@@ -31,6 +31,7 @@ export default async function SearchPage({ searchParams }: any) {
                         </p>
                     </a>
                 ))}
+                {/*<p>{JSON.stringify(results.doc.snippet)}</p>*/}
             </div>
 
             {results.length === 0 && (

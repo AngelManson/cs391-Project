@@ -17,23 +17,47 @@ export async function getSearch(query: string) {
 
     const collection = await getCollection(PAGES_COLLECTION);
 
-    return await collection.aggregate([
-        {
-            $search: {
-                index: "default",
-                text: {
-                    query,
-                    path: ["title", "searchText"]
+    console.log("QUERY:", query);
+
+    const count = await collection.countDocuments();
+    console.log("TOTAL DOCS:", count);
+
+    const sample = await collection.find().limit(1).toArray();
+    console.log("SAMPLE DOC:", sample[0]);
+
+    const indexes = ["default", "default_1", "default_2"];
+
+    let all_results : any[] = [];
+
+    for (const index of indexes) {
+        const result = await collection.aggregate([
+            {
+                $search: {
+                    index: index,
+                    text: {
+                        query,
+                        // path: ["title", "searchText"]
+                        path: {
+                            wildcard: "*" //to allow search through every field
+                        }
+                    }
                 }
-            }
-        },
-        {
-            $project: {
-                title: 1,
-                searchText: 1,
-                score: { $meta: "searchScore" }
-            }
-        },
-        { $limit: 20 }
-    ]).toArray();
+            },
+            {
+                $project: {
+                    title: "$_id",
+                    // searchText: 1,
+                    searchText: {
+                        $meta: "searchHighlights"  // highlight matched text
+                    },
+                    score: {$meta: "searchScore"}
+                }
+            },
+            {$limit: 20}
+        ]).toArray();
+
+        all_results = all_results.concat(result);
+    }
+
+    return all_results
 }
