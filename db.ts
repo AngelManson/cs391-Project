@@ -6,7 +6,7 @@ if (!MONGO_URI) {
 }
 
 const DB_NAME = "cs391-final-project";
-export const NOTES_COLLECTION = "notes-collection";
+export const PAGES_COLLECTION = "pages-collection";
 
 let client: MongoClient | null = null;
 let db: Db | null = null;
