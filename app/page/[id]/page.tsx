@@ -1,65 +1,129 @@
 /*
-this is the page that will dynamically turn every document into page
-Uses findOne(),
- */
+  Dynamic content page for a single lecture/resource.
+  Route: /page/[id]
+*/
+
 import getCollection, { PAGES_COLLECTION } from "@/db";
-// import { ObjectId } from "mongodb"; don't think we need
 
-export default async function ContentPage({params} : {params: Promise<{id:any}>}) {
+type JsonPrimitive = string | number | boolean | null;
+type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
+
+interface JsonObject {
+    [key: string]: JsonValue;
+}
+
+// NOTE: params is a Promise in Next 16 dynamic routes
+interface ContentPageProps {
+    params: Promise<{ id: string }>;
+}
+
+// turn "css_introduction" -> "Css introduction"
+function formatKeyLabel(key: string): string {
+    return key
+        .replace(/_/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .replace(/^\w/, (c) => c.toUpperCase());
+}
+
+// recursively render any JSON shape (string, array, object)
+function RenderValue({ value }: { value: JsonValue }) {
+    if (
+        typeof value === "string" ||
+        typeof value === "number" ||
+        typeof value === "boolean"
+    ) {
+        return <p className="mb-2 leading-relaxed">{String(value)}</p>;
+    }
+
+    if (value === null) {
+        return <p className="mb-2 text-gray-500">null</p>;
+    }
+
+    if (Array.isArray(value)) {
+        return (
+            <ul className="list-disc pl-6 mb-3">
+                {value.map((item, i) => (
+                    <li key={i}>
+                        <RenderValue value={item} />
+                    </li>
+                ))}
+            </ul>
+        );
+    }
+
+    // object
+    return (
+        <div className="ml-4 border-l border-gray-200 pl-4 space-y-3">
+            {Object.entries(value).map(([k, v]) => (
+                <div key={k}>
+                    <h3 className="font-semibold mb-1">{formatKeyLabel(k)}</h3>
+                    <RenderValue value={v} />
+                </div>
+            ))}
+        </div>
+    );
+}
+
+export default async function ContentPage({ params }: ContentPageProps) {
+    // 🔹 1) UNWRAP params (this fixes the warning)
+    const { id } = await params;
+    console.log("ContentPage id =", id);
+
     const collection = await getCollection(PAGES_COLLECTION);
-    const {id} = await params;
 
-    const doc = await collection.findOne({ _id: id });
+    // 🔹 2) Try string _id first (what your docs look like in Compass)
+    let doc = (await collection.findOne({ _id: id } as any)) as JsonObject | null;
+
+    // Optional: fallback if this collection still has ObjectId _id’s
+    if (!doc) {
+        try {
+            const { ObjectId } = await import("mongodb");
+            if (ObjectId.isValid(id)) {
+                console.log("Trying ObjectId path for id =", id);
+                doc = (await collection.findOne(
+                    { _id: new ObjectId(id) } as any
+                )) as JsonObject | null;
+            }
+        } catch (e) {
+            console.error("Error while trying ObjectId fallback:", e);
+        }
+    }
+
+    console.log("ContentPage doc =", doc);
 
     if (!doc) {
         return <main className="p-10">Document not found.</main>;
     }
 
+    // pick a nice title: source_document if present, otherwise the id
+    const title =
+        (doc.source_document as string | undefined) ??
+        (doc.title as string | undefined) ??
+        id;
+
+    // filter out meta fields you don't want as sections
+    const entries = Object.entries(doc).filter(
+        ([key]) =>
+            key !== "_id" &&
+            key !== "source_document" &&
+            key !== "title" &&
+            key !== "searchText"
+    );
+
     return (
         <main className="p-10 max-w-4xl mx-auto">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">{title}</h1>
 
-            {/*test title to see if the doc is even being rendered*/}
-            <h1 className="text-3xl font-bold text-gray-900">YES</h1>
-            {/*This shows that it is being rendered but the code below is incorrect and fails to pull info from
-            the data ...*/}
-
-            <h1 className="text-4xl font-bold mb-8">{doc.title}</h1>
-
-            {doc.pages?.map((page: any, i: number) => (
-                <section key={i} className="mb-10">
-                    <h2 className="text-gray-500 text-sm mb-4">Page {page.number}</h2>
-
-                    {page.content.map((block: any, j: number) => {
-                        if (block.type === "heading") {
-                            return (
-                                <h3 key={j} className="text-2xl font-semibold mt-6 mb-2">
-                                    {block.text}
-                                </h3>
-                            );
-                        }
-
-                        if (block.type === "paragraph") {
-                            return (
-                                <p key={j} className="leading-relaxed mb-4">
-                                    {block.text}
-                                </p>
-                            );
-                        }
-
-                        if (block.type === "list") {
-                            return (
-                                <ul key={j} className="list-disc pl-6 mb-4">
-                                    {block.items.map((item: string, k: number) => (
-                                        <li key={k}>{item}</li>
-                                    ))}
-                                </ul>
-                            );
-                        }
-
-                        return null;
-                    })}
+            {entries.map(([key, value]) => (
+                <section key={key} className="mb-8">
+                    <h2 className="text-xl font-semibold mb-3">
+                        {formatKeyLabel(key)}
+                    </h2>
+                    <RenderValue value={value} />
                 </section>
             ))}
         </main>
     );
 }
+
