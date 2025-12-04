@@ -1,10 +1,12 @@
 import Header from "@/components/Header"
+import {auth} from "@/auth";
 
-export default function aboutPage(){
+export default async function aboutPage(){
+    const session = await auth();
     return (
 
         <div className={`flex flex-col justify-center items-center p-2`}>
-            <Header/>
+            <Header user={session?.user ?? null}/>
             <h1>About This Application</h1>
             <p>
                 This application is a custom search engine built for <strong>CS391</strong>.
