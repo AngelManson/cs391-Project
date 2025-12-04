@@ -17,13 +17,13 @@ export async function getSearch(query: string) {
 
     const collection = await getCollection(PAGES_COLLECTION);
 
-    console.log("QUERY:", query);
-
-    const count = await collection.countDocuments();
-    console.log("TOTAL DOCS:", count);
-
-    const sample = await collection.find().limit(1).toArray();
-    console.log("SAMPLE DOC:", sample[0]);
+    // console.log("QUERY:", query);
+    //
+    // const count = await collection.countDocuments();
+    // console.log("TOTAL DOCS:", count);
+    //
+    // const sample = await collection.find().limit(1).toArray();
+    // console.log("SAMPLE DOC:", sample[0]);
 
     const indexes = ["default", "default_1", "default_2"];
 
@@ -47,17 +47,60 @@ export async function getSearch(query: string) {
                 $project: {
                     title: "$_id",
                     // searchText: 1,
-                    searchText: {
-                        $meta: "searchHighlights"  // highlight matched text
-                    },
+                    // rawDoc: "$$ROOT", //for testing
+                    // searchText: {
+                    //     $meta: "searchHighlights"
+                    // },
+                    searchText: 1,
                     score: {$meta: "searchScore"}
                 }
             },
             {$limit: 20}
         ]).toArray();
 
+        //logs for testing
+        // console.log("rawDoc", result[0].rawDoc)
+        // console.log("searchText", result[0].searchText)
         all_results = all_results.concat(result);
     }
 
-    return all_results
+    // //made a function to retrieve all the words from nested fields
+    // function flattenText(obj: any): string {
+    //     const fin_val: string[] = [];
+    //
+    //     function recurse(value: any) {
+    //         if (value == null) return;
+    //
+    //         // If string then just store it
+    //         if (typeof value === "string") {
+    //             fin_val.push(value);
+    //         }
+    //
+    //         // If array then process each element
+    //         else if (Array.isArray(value)) {
+    //             value.forEach((v) => recurse(v));
+    //         }
+    //
+    //         // If object then process each key
+    //         else if (typeof value === "object") {
+    //             Object.values(value).forEach((v) => recurse(v));
+    //         }
+    //     }
+    //
+    //     recurse(obj);
+    //     return fin_val.join(" ");
+    // }
+
+    // // return all_results
+    // all_results = all_results.map(doc => {
+    //     return {
+    //         ...doc,
+    //         // searchText: Object.values(doc)
+    //         //     .flat()
+    //         //     .join(" ")
+    //         searchText: flattenText(doc)
+    //     };
+    // });
+
+    return all_results;
 }

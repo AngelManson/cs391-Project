@@ -5,6 +5,7 @@ Uses getSearch.ts to get matching documents:
 */
 
 import { getSearch } from "@/lib/getSearch";
+import Link from "next/link";
 
 export default async function SearchPage({ searchParams } : any) {
     const params = await searchParams;
@@ -20,16 +21,17 @@ export default async function SearchPage({ searchParams } : any) {
 
             <div className="space-y-6">
                 {results.map((doc) => (
-                    <a
+                    // console.log("RAW HIGHLIGHTS:", doc.searchText), testinggg
+                    <Link //swicted from a to Link since I think he only wants link
                         key={doc.title}
-                        href={`/doc/${doc.title}`}
+                        href={`/page/${doc.title}`}
                         className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
                     >
                         <h2 className="text-xl font-semibold">{doc.title}</h2>
                         <p className="text-sm text-gray-600 mt-1">
                             {doc.searchText?.slice(0, 180)}...
                         </p>
-                    </a>
+                    </Link>
                 ))}
             </div>
 
