@@ -10,18 +10,21 @@ It is NOT meant to fetch a single document by ID.
  */
 "use server";
 
-import client from "./mongo";
+import getCollection, { PAGES_COLLECTION } from "@/db";
 
 export async function getSearch(query: string) {
     if (!query.trim()) return [];
 
-    const db = (await client).db("searchdb");
+    const collection = await getCollection(PAGES_COLLECTION);
 
-    return await db.collection("documents").aggregate([
+    return await collection.aggregate([
         {
             $search: {
                 index: "default",
-                text: { query, path: ["title", "searchText"] }
+                text: {
+                    query,
+                    path: ["title", "searchText"]
+                }
             }
         },
         {

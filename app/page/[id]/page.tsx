@@ -2,17 +2,19 @@
 this is the page that will dynamically turn every document into page
 Uses findOne(),
  */
-import client from "@/lib/mongo";
+import getCollection, { PAGES_COLLECTION } from "@/db";
 import { ObjectId } from "mongodb";
 
 export default async function DocPage({ params }: any) {
-    const db = (await client).db("searchdb");
+    const collection = await getCollection(PAGES_COLLECTION);
 
-    const doc = await db.collection("documents").findOne({
+    const doc = await collection.findOne({
         _id: new ObjectId(params.id)
     });
 
-    if (!doc) return <div className="p-10">Document not found.</div>;
+    if (!doc) {
+        return <main className="p-10">Document not found.</main>;
+    }
 
     return (
         <main className="p-10 max-w-4xl mx-auto">
@@ -42,8 +44,8 @@ export default async function DocPage({ params }: any) {
                         if (block.type === "list") {
                             return (
                                 <ul key={j} className="list-disc pl-6 mb-4">
-                                    {block.items.map((it: string, k: number) => (
-                                        <li key={k}>{it}</li>
+                                    {block.items.map((item: string, k: number) => (
+                                        <li key={k}>{item}</li>
                                     ))}
                                 </ul>
                             );
