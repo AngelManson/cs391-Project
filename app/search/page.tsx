@@ -2,12 +2,14 @@
 General Results page
 ✔ Search Page (/search)
 Uses getSearch.ts to get matching documents:
- */
+*/
 
 import { getSearch } from "@/lib/getSearch";
 
 export default async function SearchPage({ searchParams }: any) {
-    const query = searchParams.q || "";
+    const params = await searchParams;
+    const query = params.q || "";
+
     const results = await getSearch(query);
 
     return (
