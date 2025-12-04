@@ -3,14 +3,13 @@ this is the page that will dynamically turn every document into page
 Uses findOne(),
  */
 import getCollection, { PAGES_COLLECTION } from "@/db";
-import { ObjectId } from "mongodb";
+// import { ObjectId } from "mongodb"; don't think we need
 
-export default async function DocPage({ params }: any) {
+export default async function ContentPage({params} : {params: Promise<{id:any}>}) {
     const collection = await getCollection(PAGES_COLLECTION);
+    const {id} = await params;
 
-    const doc = await collection.findOne({
-        _id: new ObjectId(params.id)
-    });
+    const doc = await collection.findOne({ _id: id });
 
     if (!doc) {
         return <main className="p-10">Document not found.</main>;
@@ -18,6 +17,12 @@ export default async function DocPage({ params }: any) {
 
     return (
         <main className="p-10 max-w-4xl mx-auto">
+
+            {/*test title to see if the doc is even being rendered*/}
+            <h1 className="text-3xl font-bold text-gray-900">YES</h1>
+            {/*This shows that it is being rendered but the code below is incorrect and fails to pull info from
+            the data ...*/}
+
             <h1 className="text-4xl font-bold mb-8">{doc.title}</h1>
 
             {doc.pages?.map((page: any, i: number) => (
