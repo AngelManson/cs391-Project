@@ -31,7 +31,6 @@ export default async function SearchPage({ searchParams } : any) {
                         </p>
                     </a>
                 ))}
-                {/*<p>{JSON.stringify(results.doc.snippet)}</p>*/}
             </div>
 
             {results.length === 0 && (

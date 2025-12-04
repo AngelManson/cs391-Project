@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 export default function HomePage() {
 
     const [query, setQuery] = useState("");
-    const router = useRouter();   // ← add this
+    const router = useRouter();   //added for routing to search
 
     function handleSearch (e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
