@@ -16,7 +16,7 @@ export default function HomePage() {
         <main className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
             {/* Page Title (optional) */}
             <h1 className="text-4xl font-semibold mb-10 text-gray-800">
-                CS391 Search
+                Dav00di
             </h1>
 
             {/* Search bar */}
