@@ -1,7 +1,10 @@
+import Header from "@/components/Header"
 
 export default function aboutPage(){
     return (
+
         <div className={`flex flex-col justify-center items-center p-2`}>
+            <Header/>
             <h1>About This Application</h1>
             <p>
                 This application is a custom search engine built for <strong>CS391</strong>.
