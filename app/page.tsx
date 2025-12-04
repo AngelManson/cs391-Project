@@ -1,18 +1,14 @@
 "use client";
 
-import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function HomePage() {
-    const router = useRouter();
+
     const [query, setQuery] = useState("");
 
     function handleSearch (e: React.FormEvent<HTMLFormElement>){
         e.preventDefault();
 
-        if (!query.trim()){
-            return;
-        }
         //add navigation to results page with query
     };
 
