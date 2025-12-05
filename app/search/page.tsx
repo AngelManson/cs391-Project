@@ -24,7 +24,7 @@ export default async function SearchPage({ searchParams } : any) {
                     <Header user={session?.user ?? null} />
                 </div>
 
-                <h1 className="mt-6 mb-6 text-lg text-center text-slate-500">
+                <h1 className="!mt-6 !mb-6 text-lg text-center text-slate-500">
                     Results for:{" "}
                     <span className="font-semibold text-blue-900">{query}</span>
                 </h1>
@@ -39,7 +39,7 @@ export default async function SearchPage({ searchParams } : any) {
                             <h2 className="text-lg font-semibold text-blue-900">
                                 {doc.title}
                             </h2>
-                            <p className="mt-1 text-sm text-slate-600">
+                            <p className="!mt-1 text-sm text-slate-600">
                                 {doc.searchText?.slice(0, 220)}...
                             </p>
                         </Link>
@@ -47,7 +47,7 @@ export default async function SearchPage({ searchParams } : any) {
                 </div>
 
                 {results.length === 0 && (
-                    <p className="mt-10 text-center text-slate-500">
+                    <p className="!mt-10 text-center text-slate-500">
                         No results found. Try another keyword.
                     </p>
                 )}

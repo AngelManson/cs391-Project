@@ -6,63 +6,24 @@
 import getCollection, { PAGES_COLLECTION } from "@/db";
 import Header from "@/components/Header";
 import {auth} from "@/auth";
-import {JsonValue} from "@/types/ContentPageProps";
+
 import {ContentPageProps} from "@/types/ContentPageProps";
 import {JsonObject} from "@/types/ContentPageProps";
+import RenderValue from "@/components/RenderValue";
 
 
-// turn "css_introduction" -> "Css introduction"
-function formatKeyLabel(key: string): string {
-    return key
-        .replace(/_/g, " ")
-        .replace(/\s+/g, " ")
-        .trim()
-        .replace(/^\w/, (c) => c.toUpperCase());
-}
-
-// recursively render any JSON shape (string, array, object)
-function RenderValue({ value }: { value: JsonValue }) {
-    if (
-        typeof value === "string" ||
-        typeof value === "number" ||
-        typeof value === "boolean"
-    ) {
-        return <p className="mb-4 leading-relaxed text-slate-800">{String(value)}</p>;
-
-    }
-
-    if (value === null) {
-        return <p className="mb-4 text-slate-400">null</p>;
-    }
-
-    if (Array.isArray(value)) {
-        return (
-            <ul className="mb-4 list-disc pl-6 space-y-2 text-slate-800">
-                {value.map((item, i) => (
-                    <li key={i}>
-                        <RenderValue value={item} />
-                    </li>
-                ))}
-            </ul>
-        );
-    }
-
-    // object
-    return (
-        <div className="ml-4 border-slate-200 pl-4 space-y-4">
-            {Object.entries(value).map(([k, v]) => (
-                <div key={k}>
-                    <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-blue-800">
-                        {formatKeyLabel(k)}
-                    </h3>
-                    <RenderValue value={v} />
-                </div>
-            ))}
-        </div>
-    );
-}
 
 export default async function ContentPage({ params }: ContentPageProps) {
+
+    // turn "css_introduction" -> "Css introduction"
+    function formatKeyLabel(key: string): string {
+        return key
+            .replace(/_/g, " ")
+            .replace(/\s+/g, " ")
+            .trim()
+            .replace(/^\w/, (c) => c.toUpperCase());
+    }
+
     const session = await auth();
     const { id } = await params;
     console.log("ContentPage id =", id);
@@ -120,16 +81,16 @@ export default async function ContentPage({ params }: ContentPageProps) {
             <main className="min-h-screen bg-slate-50 px-4 py-10 flex justify-center">
                 <div className="w-full max-w-4xl rounded-2xl bg-white px-8 py-8 shadow-sm">
 
-                    <h1 className="mb-4 text-3xl font-bold text-blue-900">
+                    <h1 className="!mb-4 text-3xl font-bold text-blue-900">
                         {title}
                     </h1>
 
-                    <div className="mb-6 h-px w-full bg-slate-200" />
+                    <div className="!mb-6 h-px w-full bg-slate-200" />
 
                     {entries.map(([key, value]) => (
                         <section key={key} className="pt-6 mb-16">
 
-                        <h2 className="mb-3 text-xl font-semibold text-blue-900">
+                        <h2 className="!mb-3 text-xl font-semibold text-blue-900">
                                 {formatKeyLabel(key)}
                             </h2>
                             <RenderValue value={value} />
