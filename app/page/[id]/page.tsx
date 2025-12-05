@@ -6,18 +6,11 @@
 import getCollection, { PAGES_COLLECTION } from "@/db";
 import Header from "@/components/Header";
 import {auth} from "@/auth";
+import {JsonValue} from "@/types/ContentPageProps";
+import {ContentPageProps} from "@/types/ContentPageProps";
+import {JsonObject} from "@/types/ContentPageProps";
 
-type JsonPrimitive = string | number | boolean | null;
-type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
 
-interface JsonObject {
-    [key: string]: JsonValue;
-}
-
-// NOTE: params is a Promise in Next 16 dynamic routes
-interface ContentPageProps {
-    params: Promise<{ id: string }>;
-}
 
 // turn "css_introduction" -> "Css introduction"
 function formatKeyLabel(key: string): string {

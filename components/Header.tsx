@@ -2,17 +2,8 @@
 
 import Link from "next/link"
 import { signIn, signOut } from "next-auth/react";
+import {HeaderProps} from "@/types/HeaderProps";
 
-type HeaderUser = {
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
-
-} | null;
-
-type HeaderProps = {
-    user: HeaderUser;
-};
 
 export default function Header({user}: HeaderProps) {
 
