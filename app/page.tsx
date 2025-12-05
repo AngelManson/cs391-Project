@@ -19,7 +19,7 @@ export default function HomePage() {
 
     return (
         <main className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
-            <h1 className="text-5xl font-semibold !mb-10 text-gray-800">
+            <h1 className="text-5xl font-semibold !mb-10 text-blue-900">
                 Dav000di
             </h1>
 
@@ -39,7 +39,7 @@ export default function HomePage() {
 
                 <button
                     type="submit"
-                    className="!mt-6 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-lg border border-gray-300 transition"
+                    className="!mt-6 bg-blue-900 hover:bg-blue-800 text-white px-6 py-2 rounded-lg border border-gray-300 transition"
                 >
                     Search
                 </button>
