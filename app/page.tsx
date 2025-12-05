@@ -19,7 +19,7 @@ export default function HomePage() {
     };
 
     return (
-        <main className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
+        <main className="flex flex-col items-center justify-center w-full bg-white px-4">
 
                 <Image
                     src={logo}
