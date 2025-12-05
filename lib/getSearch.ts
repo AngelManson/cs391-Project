@@ -45,8 +45,8 @@ export async function getSearch(query: string) {
             },
             {
                 $project: {
-                    // _id: "$_id",
-                    title: "$_id",
+                    _id: "$_id",
+                    title: "$source_document",
                     // searchText: 1,
                     // rawDoc: "$$ROOT", //for testing
                     // searchText: {

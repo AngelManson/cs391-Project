@@ -23,7 +23,7 @@ export default async function SearchPage({ searchParams } : any) {
                 {results.map((doc) => (
                     // console.log("RAW HIGHLIGHTS:", doc.searchText), testinggg
                     <Link //swicted from a to Link since I think he only wants link
-                        key={doc.title}
+                        key={doc._id}
                         href={`/page/${doc.title}`}
                         className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
                     >
