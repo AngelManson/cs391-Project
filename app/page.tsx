@@ -1,5 +1,6 @@
 "use client";
-
+import Image from "next/image";
+import logo from "@/src/logo.png";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -19,9 +20,14 @@ export default function HomePage() {
 
     return (
         <main className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
-            <h1 className="text-5xl font-semibold !mb-10 text-blue-900">
-                Dav000di
-            </h1>
+
+                <Image
+                    src={logo}
+                    alt="our website logo"
+                    className="!mb-8"
+           />
+
+
 
             <form
                 onSubmit={handleSearch}

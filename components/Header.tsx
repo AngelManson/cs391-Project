@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import logo from "@/src/logo.png";
 import Link from "next/link"
 import { signIn, signOut } from "next-auth/react";
 import {HeaderProps} from "@/types/HeaderProps";
@@ -13,7 +15,13 @@ export default function Header({user}: HeaderProps) {
                     <Link
                         href = {'/'}
                         className = "block p-1 m-2 text-xl hover:underline">
-                        Dav00di
+                        <Image
+                            src={logo}
+                            alt="our website logo"
+                            height={200}
+                            width={200}
+                            className="!p-1 m-2"
+                        />
                     </Link>
             {/*Header rightside*/}
             <div className="flex items-center gap-3">
