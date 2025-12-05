@@ -36,14 +36,14 @@ export default function Header({user}: HeaderProps) {
                 {!user ? (
                     <button
                         onClick={() => signIn("google")}
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                        className="px-4 py-2 bg-blue-950 text-white rounded hover:bg-blue-800 transition cursor-pointer"
                     >
                         Sign in with Google
                     </button>
                 ) : (
                     <button
                         onClick={() => signOut()}
-                        className="px-4 py-2 bg-gray-200 text-black rounded hover:bg-gray-300 transition"
+                        className="px-4 py-2 bg-gray-200 text-black rounded hover:bg-gray-300 transition cursor-pointer"
                     >
                         Sign out
                     </button>

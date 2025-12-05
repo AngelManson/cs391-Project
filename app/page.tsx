@@ -45,7 +45,7 @@ export default function HomePage() {
 
                 <button
                     type="submit"
-                    className="!mt-6 bg-blue-900 hover:bg-blue-800 text-white px-6 py-2 rounded-lg border border-gray-300 transition"
+                    className="!mt-6 bg-blue-900 hover:bg-blue-800 text-white px-6 py-2 rounded-lg border border-gray-300 transition cursor-pointer"
                 >
                     Search
                 </button>
