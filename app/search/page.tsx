@@ -6,8 +6,12 @@ Uses getSearch.ts to get matching documents:
 
 import { getSearch } from "@/lib/getSearch";
 import Link from "next/link";
+import Header from "@/components/Header";
+import {auth} from "@/auth";
+
 
 export default async function SearchPage({ searchParams } : any) {
+    const session = await auth();
     const params = await searchParams;
     const query = params.q || "";
 
@@ -15,6 +19,7 @@ export default async function SearchPage({ searchParams } : any) {
 
     return (
         <main className="px-6 py-10 max-w-3xl mx-auto">
+            <Header user={session?.user ?? null}/>
             <h1 className="text-lg text-gray-700 mb-6">
                 Results for: <span className="font-semibold">{query}</span>
             </h1>
@@ -24,7 +29,7 @@ export default async function SearchPage({ searchParams } : any) {
                     // console.log("RAW HIGHLIGHTS:", doc.searchText), testinggg
                     <Link //swicted from a to Link since I think he only wants link
                         key={doc._id}
-                        href={`/page/${doc.title}`}
+                        href={`/page/${doc._id}`}
                         className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
                     >
                         <h2 className="text-xl font-semibold">{doc.title}</h2>
