@@ -33,16 +33,17 @@ function RenderValue({ value }: { value: JsonValue }) {
         typeof value === "number" ||
         typeof value === "boolean"
     ) {
-        return <p className="mb-2 leading-relaxed">{String(value)}</p>;
+        return <p className="mb-4 leading-relaxed text-slate-800">{String(value)}</p>;
+
     }
 
     if (value === null) {
-        return <p className="mb-2 text-gray-500">null</p>;
+        return <p className="mb-4 text-slate-400">null</p>;
     }
 
     if (Array.isArray(value)) {
         return (
-            <ul className="list-disc pl-6 mb-3">
+            <ul className="mb-4 list-disc pl-6 space-y-2 text-slate-800">
                 {value.map((item, i) => (
                     <li key={i}>
                         <RenderValue value={item} />
@@ -54,10 +55,12 @@ function RenderValue({ value }: { value: JsonValue }) {
 
     // object
     return (
-        <div className="ml-4 border-l border-gray-200 pl-4 space-y-3">
+        <div className="ml-4 border-slate-200 pl-4 space-y-4">
             {Object.entries(value).map(([k, v]) => (
                 <div key={k}>
-                    <h3 className="font-semibold mb-1">{formatKeyLabel(k)}</h3>
+                    <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-blue-800">
+                        {formatKeyLabel(k)}
+                    </h3>
                     <RenderValue value={v} />
                 </div>
             ))}
@@ -93,7 +96,13 @@ export default async function ContentPage({ params }: ContentPageProps) {
     console.log("ContentPage doc =", doc);
 
     if (!doc) {
-        return <main className="p-10">Document not found.</main>;
+        return (
+            <main className="min-h-screen bg-slate-100 px-4 py-10 flex items-center justify-center">
+                <div className="rounded-2xl bg-white px-8 py-6 shadow-sm">
+                    <p className="text-slate-600">Document not found.</p>
+                </div>
+            </main>
+        );
     }
 
 
@@ -112,18 +121,26 @@ export default async function ContentPage({ params }: ContentPageProps) {
     );
 
     return (
-        <main className="p-10 max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-900 mb-6">{title}</h1>
+        <main className="min-h-screen bg-slate-50 px-4 py-10 flex justify-center">
+            <div className="w-full max-w-4xl rounded-2xl bg-white px-8 py-8 shadow-sm">
+                <h1 className="mb-4 text-3xl font-bold text-blue-900">
+                    {title}
+                </h1>
 
-            {entries.map(([key, value]) => (
-                <section key={key} className="mb-8">
-                    <h2 className="text-xl font-semibold mb-3">
-                        {formatKeyLabel(key)}
-                    </h2>
-                    <RenderValue value={value} />
-                </section>
-            ))}
+                <div className="mb-6 h-px w-full bg-slate-200" />
+
+                {entries.map(([key, value]) => (
+                    <section key={key} className="pt-6 mb-16">
+
+                    <h2 className="mb-3 text-xl font-semibold text-blue-900">
+                            {formatKeyLabel(key)}
+                        </h2>
+                        <RenderValue value={value} />
+                    </section>
+                ))}
+            </div>
         </main>
     );
+
 }
 
