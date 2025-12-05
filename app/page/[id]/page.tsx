@@ -4,6 +4,8 @@
 */
 
 import getCollection, { PAGES_COLLECTION } from "@/db";
+import Header from "@/components/Header";
+import {auth} from "@/auth";
 
 type JsonPrimitive = string | number | boolean | null;
 type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
@@ -66,6 +68,7 @@ function RenderValue({ value }: { value: JsonValue }) {
 }
 
 export default async function ContentPage({ params }: ContentPageProps) {
+    const session = await auth();
     // 🔹 1) UNWRAP params (this fixes the warning)
     const { id } = await params;
     console.log("ContentPage id =", id);
@@ -113,6 +116,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
 
     return (
         <main className="p-10 max-w-4xl mx-auto">
+            <Header user={session?.user ?? null}/>
             <h1 className="text-3xl font-bold text-gray-900 mb-6">{title}</h1>
 
             {entries.map(([key, value]) => (
