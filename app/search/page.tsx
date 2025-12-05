@@ -18,31 +18,40 @@ export default async function SearchPage({ searchParams } : any) {
     const results = await getSearch(query);
 
     return (
-        <main className="px-6 py-10 max-w-3xl mx-auto">
-            <Header user={session?.user ?? null}/>
-            <h1 className="text-lg text-gray-700 mb-6">
-                Results for: <span className="font-semibold">{query}</span>
-            </h1>
+        <main className="min-h-screen bg-slate-50 px-4 py-8 flex justify-center">
+            <div className="w-full max-w-3xl">
+                <div className="flex justify-center">
+                    <Header user={session?.user ?? null} />
+                </div>
 
-            <div className="space-y-6">
-                {results.map((doc) => (
-                    // console.log("RAW HIGHLIGHTS:", doc.searchText), testinggg
-                    <Link //swicted from a to Link since I think he only wants link
-                        key={doc._id}
-                        href={`/page/${doc._id}`}
-                        className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
-                    >
-                        <h2 className="text-xl font-semibold">{doc.title}</h2>
-                        <p className="text-sm text-gray-600 mt-1">
-                            {doc.searchText?.slice(0, 220)}...
-                        </p>
-                    </Link>
-                ))}
+                <h1 className="mt-6 mb-6 text-lg text-center text-slate-500">
+                    Results for:{" "}
+                    <span className="font-semibold text-blue-900">{query}</span>
+                </h1>
+
+                <div className="space-y-4">
+                    {results.map((doc: any) => (
+                        <Link
+                            key={doc._id}
+                            href={`/page/${doc._id}`}
+                            className="block rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-blue-200 hover:shadow-md"
+                        >
+                            <h2 className="text-lg font-semibold text-blue-900">
+                                {doc.title}
+                            </h2>
+                            <p className="mt-1 text-sm text-slate-600">
+                                {doc.searchText?.slice(0, 220)}...
+                            </p>
+                        </Link>
+                    ))}
+                </div>
+
+                {results.length === 0 && (
+                    <p className="mt-10 text-center text-slate-500">
+                        No results found. Try another keyword.
+                    </p>
+                )}
             </div>
-
-            {results.length === 0 && (
-                <p className="text-gray-500 mt-10">No results found.</p>
-            )}
         </main>
     );
 }
