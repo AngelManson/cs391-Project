@@ -6,6 +6,7 @@ import {HeaderProps} from "@/types/HeaderProps";
 
 
 export default function Header({user}: HeaderProps) {
+    console.log("HEADER USER:", user);
 
     return (
         <nav className="w-full flex justify-between items-center p-3 border-b border-gray-200">
@@ -15,7 +16,15 @@ export default function Header({user}: HeaderProps) {
                         Dav00di
                     </Link>
             {/*Header rightside*/}
-            <div>
+            <div className="flex items-center gap-3">
+                {/*show profile img if logged in */}
+                {user?.image && (
+                    <img
+                        src={user.image}
+                        alt="Profile"
+                        className="w-10 h-10 rounded-full border"
+                    />
+                )}
                 {!user ? (
                     <button
                         onClick={() => signIn("google")}
