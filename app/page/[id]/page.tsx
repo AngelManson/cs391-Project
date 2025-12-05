@@ -4,18 +4,12 @@
 */
 
 import getCollection, { PAGES_COLLECTION } from "@/db";
+import Header from "@/components/Header";
+import {auth} from "@/auth";
+import {JsonValue} from "@/types/ContentPageProps";
+import {ContentPageProps} from "@/types/ContentPageProps";
+import {JsonObject} from "@/types/ContentPageProps";
 
-type JsonPrimitive = string | number | boolean | null;
-type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
-
-interface JsonObject {
-    [key: string]: JsonValue;
-}
-
-
-interface ContentPageProps {
-    params: Promise<{ id: string }>;
-}
 
 // turn "css_introduction" -> "Css introduction"
 function formatKeyLabel(key: string): string {
@@ -69,13 +63,13 @@ function RenderValue({ value }: { value: JsonValue }) {
 }
 
 export default async function ContentPage({ params }: ContentPageProps) {
-    //UNWRAP params
+    const session = await auth();
     const { id } = await params;
     console.log("ContentPage id =", id);
 
     const collection = await getCollection(PAGES_COLLECTION);
 
-    // Try string _id first
+    //Try string _id first
     let doc = (await collection.findOne({ _id: id } as any)) as JsonObject | null;
 
 
@@ -121,25 +115,29 @@ export default async function ContentPage({ params }: ContentPageProps) {
     );
 
     return (
-        <main className="min-h-screen bg-slate-50 px-4 py-10 flex justify-center">
-            <div className="w-full max-w-4xl rounded-2xl bg-white px-8 py-8 shadow-sm">
-                <h1 className="mb-4 text-3xl font-bold text-blue-900">
-                    {title}
-                </h1>
+        <>
+            <Header user={session?.user ?? null} />
+            <main className="min-h-screen bg-slate-50 px-4 py-10 flex justify-center">
+                <div className="w-full max-w-4xl rounded-2xl bg-white px-8 py-8 shadow-sm">
 
-                <div className="mb-6 h-px w-full bg-slate-200" />
+                    <h1 className="mb-4 text-3xl font-bold text-blue-900">
+                        {title}
+                    </h1>
 
-                {entries.map(([key, value]) => (
-                    <section key={key} className="pt-6 mb-16">
+                    <div className="mb-6 h-px w-full bg-slate-200" />
 
-                    <h2 className="mb-3 text-xl font-semibold text-blue-900">
-                            {formatKeyLabel(key)}
-                        </h2>
-                        <RenderValue value={value} />
-                    </section>
-                ))}
-            </div>
-        </main>
+                    {entries.map(([key, value]) => (
+                        <section key={key} className="pt-6 mb-16">
+
+                        <h2 className="mb-3 text-xl font-semibold text-blue-900">
+                                {formatKeyLabel(key)}
+                            </h2>
+                            <RenderValue value={value} />
+                        </section>
+                    ))}
+                </div>
+            </main>
+        </>
     );
 
 }
