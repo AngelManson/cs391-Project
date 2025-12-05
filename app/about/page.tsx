@@ -1,5 +1,7 @@
 import Header from "@/components/Header"
 import {auth} from "@/auth";
+import davoodi from "@/src/davoodi.png";
+import Image from "next/image";
 
 export default async function aboutPage(){
     const session = await auth();
@@ -9,8 +11,14 @@ export default async function aboutPage(){
             <Header user={session?.user ?? null} />
         </div>
             <div className="flex flex-col justify-center items-center w-full flex-grow">
+                <Image
+                    src={davoodi}
+                    alt="our website logo"
+                    className="!mb-1 rounded-lg !font-bold"
+                />
+                <p className="!mb-3">All Content Created by Professor Davoodi</p>
             <div className="w-full max-w-3xl rounded-2xl bg-white shadow-sm border border-slate-200 p-10">
-                <h1 className="text-4xl font-bold text-blue-900 !mb-6 text-center">
+                <h1 className="text-4xl font-bold text-blue-900  !mb-6 text-center">
                     About This Application
                 </h1>
 
