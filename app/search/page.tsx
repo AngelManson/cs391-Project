@@ -34,7 +34,7 @@ export default async function SearchPage({ searchParams } : any) {
                     >
                         <h2 className="text-xl font-semibold">{doc.title}</h2>
                         <p className="text-sm text-gray-600 mt-1">
-                            {doc.searchText?.slice(0, 180)}...
+                            {doc.searchText?.slice(0, 220)}...
                         </p>
                     </Link>
                 ))}
