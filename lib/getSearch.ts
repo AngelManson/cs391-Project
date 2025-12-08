@@ -1,13 +1,7 @@
 /*
-getSearch.ts is ONLY for searching
-getSearch.ts performs Atlas Search queries across your entire documents collection.
-It’s meant for:
-Finding all documents matching a query
-Ranking them
-Returning search snippets
-Powering /search?q=...
-It is NOT meant to fetch a single document by ID.
- */
+This is what gets the search to actually run. getSearch.ts performs Atlas Search queries across our entire MongoDB documents collection.
+*/
+//This is done by Cheyenne Mowatt
 "use server";
 
 import getCollection, { PAGES_COLLECTION } from "@/db";
