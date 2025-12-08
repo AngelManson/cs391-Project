@@ -1,7 +1,7 @@
 /*
-General Results page
-✔ Search Page (/search)
-Uses getSearch.ts to get matching documents:
+Done by Angel Manson
+This file renders the results provided by MongoDB Altas Search
+It will render each individual result similar to how Google showcases the results
 */
 
 import { getSearch } from "@/lib/getSearch";
@@ -9,10 +9,11 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import {auth} from "@/auth";
 
-
+// had to use any as the type due to our jsons being different for each lecture slide
 export default async function SearchPage({ searchParams } : any) {
     const session = await auth();
     const params = await searchParams;
+    // allows us to retrieve the query from the params
     const query = params.q || "";
 
     const results = await getSearch(query);
@@ -25,8 +26,7 @@ export default async function SearchPage({ searchParams } : any) {
                 </div>
 
                 <h1 className="!mt-6 !mb-6 text-lg text-center text-slate-500">
-                    Results for:{" "}
-                    <span className="font-semibold text-blue-900">{query}</span>
+                    Results for: <span className="font-semibold text-blue-900">{query}</span>
                 </h1>
 
                 <div className="space-y-4">
@@ -46,6 +46,7 @@ export default async function SearchPage({ searchParams } : any) {
                     ))}
                 </div>
 
+                {/*if there are no results we will instead return this: */}
                 {results.length === 0 && (
                     <p className="!mt-10 text-center text-slate-500">
                         No results found. Try another keyword.
