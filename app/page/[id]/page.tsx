@@ -1,6 +1,12 @@
 /*
   Dynamic content page for a single lecture/resource.
-  Route: /page/[id]
+  Completed by: Esraa Sabr
+  This page is responsible for displaying the full content of whatever search result
+  the user clicks.
+  When the user selects a result, the page receives its ID from the URL. I use that ID to query our MongoDB
+  database and retrieve the full document.
+  Once the document is found, the page extracts the title and all the content fields. Then I render each section using
+  a custom RenderValue component that can display text, lists, and nested objects.
 */
 
 import getCollection, { PAGES_COLLECTION } from "@/db";

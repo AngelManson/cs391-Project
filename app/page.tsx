@@ -3,6 +3,16 @@ import Image from "next/image";
 import logo from "@/src/logo.png";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+// Completed by: Esraa Sabr
+// Spoke to Professor Davoodi about using useRouter & was told it's okay to use.
+// What useRouter does: useRouter is used to redirect user to '/search?q=...' after they submit a query.
+// Why we needed it: we needed useRouter to connect the user's search input to the database.
+// The database query happens on the `/search` page, so I needed a way to send the user there with their typed keyword.
+// Source: Next.js Official Docs on useRouter: https://nextjs.org/docs/app/api-reference/functions/use-router
+// How it relates to the rest of my code:
+//    I store the user's input using React state (`useState`), when the user clicks the search button, `handleSearch`
+//    reads the input and uses `router.push()` to go to `/search?q=<the user’s query>`. The Search page then reads that
+//    `q` value from the URL and uses it to fetch results from the MongoDB database.
 
 export default function HomePage() {
 
