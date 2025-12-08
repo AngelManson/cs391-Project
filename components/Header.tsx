@@ -1,3 +1,8 @@
+/*Done by Kaizia*/
+/* Used next.js client side signin/out handling;
+website:https://authjs.dev/getting-started/session-management/login?framework=Next.js%2520%28Client%29
+ */
+
 "use client";
 
 import Image from "next/image";

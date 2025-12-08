@@ -1,3 +1,5 @@
+/*Done by Kaizia. Followed mp6 instructions*/
+
 import NextAuth from "next-auth";
 import Google from "@auth/core/providers/google";
 
