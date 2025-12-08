@@ -1,5 +1,7 @@
 /*
-This is what gets the search to actually run. getSearch.ts performs Atlas Search queries across our entire MongoDB documents collection.
+Done by Cheyenne Mowatt
+Before this, I worked on the turning the PDFs into JSON, inputted them into the collection, and did a lot of research on AtlasSearch. This is what gets the search to actually run. getSearch.ts performs Atlas Search queries across our entire MongoDB documents collection.
+While I didn't copy code from the internet, I read a lot of documentation from the Mongodb AtlasSearch website to learn more about it: https://www.mongodb.com/docs/atlas/atlas-search/tutorial/?deployment-type=atlas&language-atlas-only-2=atlas-ui&tck=as_web_get_started
 */
 //This is done by Cheyenne Mowatt
 "use server";
@@ -7,10 +9,12 @@ This is what gets the search to actually run. getSearch.ts performs Atlas Search
 import getCollection, { PAGES_COLLECTION } from "@/db";
 
 export async function getSearch(query: string) {
+    // If user typed nothing, just return nothing
     if (!query.trim()) return [];
-
+    // Get the MongoDB collection that stores all parsed page documents
     const collection = await getCollection(PAGES_COLLECTION);
 
+    //Used this for debugging
     // console.log("QUERY:", query);
     //
     // const count = await collection.countDocuments();
@@ -19,10 +23,13 @@ export async function getSearch(query: string) {
     // const sample = await collection.find().limit(1).toArray();
     // console.log("SAMPLE DOC:", sample[0]);
 
+    //Allow searching across multiple Atlas Search indexes.
     const indexes = ["default", "default_1", "default_2"];
 
+    // Collect results from all indexes so we can merge them together
     let all_results : any[] = [];
 
+    // Loop through each index and run the same search query
     for (const index of indexes) {
         const result = await collection.aggregate([
             {
@@ -37,6 +44,7 @@ export async function getSearch(query: string) {
                     }
                 }
             },
+            // Shapes the document returned from Atlas Search.
             {
                 $project: {
                     _id: "$_id",
