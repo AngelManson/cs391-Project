@@ -9,9 +9,11 @@ import davoodi from "@/src/davoodi.png";
 import Image from "next/image";
 
 export default async function aboutPage(){
+    // for authentication
     const session = await auth();
     return (
         <>
+            {/**/}
             <div className="flex flex-col items-center w-full !mb-12">
                 <Header user={session?.user ?? null} />
             </div>

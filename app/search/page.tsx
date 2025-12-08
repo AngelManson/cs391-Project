@@ -11,16 +11,19 @@ import {auth} from "@/auth";
 
 // had to use any as the type due to our jsons being different for each lecture slide
 export default async function SearchPage({ searchParams } : any) {
+    // for authentication
     const session = await auth();
+    // retrieve the params and get query from the params using .q
     const params = await searchParams;
-    // allows us to retrieve the query from the params
     const query = params.q || "";
 
+    // get the results from Atlas Search
     const results = await getSearch(query);
 
     return (
         <main className="min-h-screen bg-slate-50 px-4 py-8 flex justify-center">
             <div className="w-full max-w-3xl">
+                {/*for authentication */}
                 <div className="flex justify-center">
                     <Header user={session?.user ?? null} />
                 </div>
@@ -30,6 +33,8 @@ export default async function SearchPage({ searchParams } : any) {
                 </h1>
 
                 <div className="space-y-4">
+                    {/* if there are results then for each we will display the title and a portion of the data from
+                    the document in Mongo which is stored under the searchText field in each document */}
                     {results.map((doc: any) => (
                         <Link
                             key={doc._id}
