@@ -3,7 +3,6 @@ Done by Cheyenne Mowatt
 Before this, I worked on the turning the PDFs into JSON, inputted them into the collection, and did a lot of research on AtlasSearch. This is what gets the search to actually run. getSearch.ts performs Atlas Search queries across our entire MongoDB documents collection.
 While I didn't copy code from the internet, I read a lot of documentation from the Mongodb AtlasSearch website to learn more about it: https://www.mongodb.com/docs/atlas/atlas-search/tutorial/?deployment-type=atlas&language-atlas-only-2=atlas-ui&tck=as_web_get_started
 */
-//This is done by Cheyenne Mowatt
 "use server";
 
 import getCollection, { PAGES_COLLECTION } from "@/db";
