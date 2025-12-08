@@ -22,6 +22,7 @@ import RenderValue from "@/components/RenderValue";
 export default async function ContentPage({ params }: ContentPageProps) {
 
     // turn "css_introduction" -> "Css introduction"
+    // Makes section titles readable.
     function formatKeyLabel(key: string): string {
         return key
             .replace(/_/g, " ")
@@ -31,15 +32,18 @@ export default async function ContentPage({ params }: ContentPageProps) {
     }
 
     const session = await auth();
+
+    // Route params are a promise so have to await it.
     const { id } = await params;
     console.log("ContentPage id =", id);
 
     const collection = await getCollection(PAGES_COLLECTION);
 
-    //Try string _id first
+    //Try fetching document using string _id first since our DB mainly uses string ids
     let doc = (await collection.findOne({ _id: id } as any)) as JsonObject | null;
 
-
+    // Fallback: If some documents still use ObjectId _id’s, try querying that way.
+    // We wrote this in case the dataset isn’t fully normalized.
     if (!doc) {
         try {
             const { ObjectId } = await import("mongodb");
@@ -55,7 +59,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
     }
 
     console.log("ContentPage doc =", doc);
-
+    // If no document is found, display a "Document not found" page.
     if (!doc) {
         return (
             <main className="min-h-screen bg-slate-100 px-4 py-10 flex items-center justify-center">
@@ -66,7 +70,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
         );
     }
 
-
+    // Page title. Use source_document, then title if not source_document, then ID itself otherwise.
     const title =
         (doc.source_document as string | undefined) ??
         (doc.title as string | undefined) ??

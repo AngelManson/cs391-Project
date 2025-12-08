@@ -1,13 +1,17 @@
+// Completed by: Esraa Sabr
+// Normalizes data. Used in [id]/page.tsx. Recursively renders any JSON value
+// so that documents from MongoDB can display.
+
 import {JsonValue} from "@/types/ContentPageProps";
 
 export default function RenderValue({ value }: { value: JsonValue }) {
-
+    // Formats keys. Used when rendering object fields.
     function formatKeyLabel(key: string): string {
         return key
-            .replace(/_/g, " ")
-            .replace(/\s+/g, " ")
+            .replace(/_/g, " ") //replace _ with spaces
+            .replace(/\s+/g, " ") //get rid of multiple spaces
             .trim()
-            .replace(/^\w/, (c) => c.toUpperCase());
+            .replace(/^\w/, (c) => c.toUpperCase()); //capitalize first letter
     }
 
     if (
@@ -18,11 +22,11 @@ export default function RenderValue({ value }: { value: JsonValue }) {
         return <p className="!mb-4 leading-relaxed text-slate-800">{String(value)}</p>;
 
     }
-
+    //null values
     if (value === null) {
         return <p className="!mb-4 text-slate-400">null</p>;
     }
-
+    // Recursion here. Recursive call to handle nested arrays/objects.
     if (Array.isArray(value)) {
         return (
             <ul className="!mb-4 list-disc pl-6 space-y-2 text-slate-800">
@@ -35,7 +39,7 @@ export default function RenderValue({ value }: { value: JsonValue }) {
         );
     }
 
-    // object
+    // If the value is an object, loop through its keys and render each section.
     return (
         <div className="!ml-4 border-slate-200 pl-4 space-y-4">
             {Object.entries(value).map(([k, v]) => (
